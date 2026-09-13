@@ -14,8 +14,20 @@
 
 <body>
     <header class="topbar">
-        <h1>WidgetDashboard</h1>
-        <p id="welcome">Loading...</p>
+        <div>
+            <h1>WidgetDashboard</h1>
+            <p id="welcome">Loading...</p>
+        </div>
+
+        <button id="logout-button" class="logout-button">
+            <div class="logout-button-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5v3H3v4h7v3zm9-14H9c-1.1 0-2 .9-2 2v3h2V5h10v14H9v-3H7v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                </svg>
+                <span>Logout</span>
+            </div>
+        </button>
+        
     </header>
 
     <main class="dashboard">
@@ -33,16 +45,42 @@
     <script>
         const token = sessionStorage.getItem("access_token");
 
+        if (!token) {
+            window.location.href = "/login";
+        }
+
+        async function authenticatedFetch(url, options = {}) {
+            options.headers = {
+                ...options.headers,
+                "Authorization": `Bearer ${token}`
+            };
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                sessionStorage.removeItem("access_token");
+                window.location.href = "/login";
+                return null;
+            }
+            return response;
+        }
+
+
+
         async function loadUser(){
-            const response = await fetch("/auth/me", {headers: {"Authorization": `Bearer ${token}`}});
+
+            const response = await authenticatedFetch("/auth/me");
+            if (!response) {
+                return;
+            }
 
             const data = await response.json();
-            console.log(data);
             document.querySelector("#welcome").textContent = `Welcome, ${data.username}!`;
         }
 
         async function loadWeather(){
-            const response = await fetch("/dashboard/weather", {headers: {"Authorization": `Bearer ${token}`}});
+            const response = await authenticatedFetch("/dashboard/weather");
+            if (!response) {
+                return;
+            }
             const data = await response.json();
             document.querySelector("#weather").innerHTML = `
                 <div class="weather-card-container">
@@ -94,10 +132,9 @@
             const saveButton = document.querySelector("#weather-save");
             saveButton.textContent = "Saving...";
             saveButton.disabled = true;
-            const response = await fetch("/dashboard/preferences/weather", {
+            const response = await authenticatedFetch("/dashboard/preferences/weather", {
                 method: "PUT",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -118,7 +155,10 @@
         }
 
         async function loadGithub(){
-            const response = await fetch("/dashboard/github", {headers: {"Authorization": `Bearer ${token}`}});
+            const response = await authenticatedFetch("/dashboard/github");
+            if (!response) {
+                return;
+            }
             const data = await response.json();
 
             document.querySelector("#github").innerHTML = `
@@ -190,10 +230,9 @@
             const saveButton = document.querySelector("#github-save");
             saveButton.textContent = "Saving...";
             saveButton.disabled = true;
-            const response = await fetch("/dashboard/preferences/github", {
+            const response = await authenticatedFetch("/dashboard/preferences/github", {
                 method: "PUT",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -214,6 +253,10 @@
         }
 
 
+        document.querySelector("#logout-button").addEventListener("click", () => {
+            sessionStorage.removeItem("access_token");
+            window.location.href = "/login";
+        });
 
         loadUser();
         loadWeather();
