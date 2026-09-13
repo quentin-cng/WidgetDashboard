@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WidgetDashboard - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+
+
+
+<body>
+    <header class="topbar">
+        <h1>WidgetDashboard</h1>
+        <p id="welcome">Loading...</p>
+    </header>
+
+    <main class="dashboard">
+        <div id="weather">
+            Loading...
+        </div>
+
+        <div id="github">
+            Loading...
+        </div>
+
+    </main>
+
+
+    <script>
+        const token = sessionStorage.getItem("access_token");
+
+        async function loadUser(){
+            const response = await fetch("/auth/me", {headers: {"Authorization": `Bearer ${token}`}});
+
+            const data = await response.json();
+            console.log(data);
+            document.querySelector("#welcome").textContent = `Welcome, ${data.username}!`;
+        }
+
+        async function loadWeather(){
+            const response = await fetch("/dashboard/weather", {headers: {"Authorization": `Bearer ${token}`}});
+            const data = await response.json();
+            document.querySelector("#weather").innerHTML = `
+                <div class="weather-card-container">
+                    <div class="weather-card">
+
+                        <p class="weather-city">${data.city}</p>
+                        <p class="weather-condition">${data.condition}</p>
+                        <p class="weather-temp">${data.temperature}°</p>
+                        
+                    </div>
+                </div>`
+            ;
+        }
+
+        async function loadGithub() {
+            const response = await fetch("/dashboard/github", {headers: {"Authorization": `Bearer ${token}`}});
+            const data = await response.json();
+
+            document.querySelector("#github").innerHTML = `
+
+                <div class="github-card">
+                    <div class="github-avatar-container">
+                        <img class="github-avatar" src="${data.avatar_url}" alt="${data.username} GitHub avatar">
+                    </div>
+
+                    <p class="github-username">${data.username}</p>
+
+                    <p class="github-role">DEVELOPER</p>
+                    <div class="github-divider"></div>
+                    <div class="github-stats">
+                        <div class="github-stat">
+                            <p class="github-stat-label">REPOSITORIES</p>
+                            <p class="github-stat-value">${data.public_repos}</p>
+
+                        </div>
+                        <div class="github-stat github-stat-followers">
+                            <p class="github-stat-label">FOLLOWERS</p>
+                            <p class="github-stat-value">${data.followers}</p>
+                        </div>
+                    </div>
+
+                    <a class="github-button" href="${data.profile_url}" target="_blank">
+                        VIEW ON GITHUB →
+                    </a>
+                </div>
+            `;
+        }
+        loadUser();
+        loadWeather();
+        loadGithub();
+    </script>
+
+
+
+
+</body>
+</html>
