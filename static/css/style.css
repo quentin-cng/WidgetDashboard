@@ -396,3 +396,39 @@ body {
     box-shadow: 0 0 12px rgba(70, 220, 220, 0.25);
     transform: translateY(-2px);
 }
+
+@media (max-width: 800px) {
+    .dashboard {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 30px 20px;
+    }
+
+    .topbar {
+        padding: 20px;
+    }
+
+    .topbar h1 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 420px) {
+    .github-card {
+        width: 100%;
+        max-width: 360px;
+    }
+
+    #github {
+        width: 100%;
+    }
+
+    .weather-card {
+        max-width: 100%;
+    }
+
+    .dashboard {
+        padding: 25px 15px;
+    }
+}
