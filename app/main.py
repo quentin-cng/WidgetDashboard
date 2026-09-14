@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 
 from app.routers import users
 from app.routers import dashboard
@@ -33,8 +34,8 @@ def dashboard_page(request: Request):
 
 
 @app.get("/")
-def title():
-    return {"message": "Personal Widget Dashboard API"}
+def root():
+    return RedirectResponse(url="/login")
 
 @app.get("/health")
 def status():
