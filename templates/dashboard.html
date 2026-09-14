@@ -110,7 +110,9 @@
                             type="text"
                             value="${currentCity}"
                             placeholder="Enter city">
-
+                        
+                        <p id="weather-error" class="settings-error"></p>
+                        
                         <button
                             id="weather-save"
                             class="weather-save">
@@ -147,7 +149,7 @@
                 await loadWeather();
             } else {
                 const data = await response.json();
-                console.log("Failed to update weather:", data);
+                document.querySelector("#weather-error").textContent = data.detail || "Failed to update weather settings.";
 
                 saveButton.textContent = "SAVE";
                 saveButton.disabled = false;
@@ -157,6 +159,10 @@
         async function loadGithub(){
             const response = await authenticatedFetch("/dashboard/github");
             if (!response) {
+                return;
+            }
+            if (response.status == 400){
+                showGithubSettings("");
                 return;
             }
             const data = await response.json();
@@ -209,6 +215,10 @@
                             value="${currentUsername}"
                             placeholder="Enter username">
 
+
+                        <p id="github-error" class="settings-error"></p>
+
+
                         <button
                             id="github-save"
                             class="github-save">
@@ -245,7 +255,7 @@
                 await loadGithub();
             } else {
                 const data = await response.json();
-                console.log("Failed to update github:", data);
+                document.querySelector("#github-error").textContent = data.detail || "Failed to update GitHub settings.";
 
                 saveButton.textContent = "SAVE";
                 saveButton.disabled = false;

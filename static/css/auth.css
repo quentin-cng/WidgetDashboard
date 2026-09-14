@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background-color: #3c3838;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 380px;
+    padding: 32px;
+    background-color: rgba(20, 30, 30, 0.75);
+    border: 1px solid rgba(70, 220, 220, 0.35);
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.auth-form:hover {
+    border-color: rgba(70, 220, 220, 0.6);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+}
+
+.auth-title {
+    margin: 0;
+
+    color: white;
+
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.auth-subtitle {
+    margin: 8px 0 24px;
+
+    color: #aaa;
+
+    font-size: 13px;
+    text-align: center;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-container input {
+    width: 100%;
+    margin: 8px 0;
+    padding: 14px 16px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.input-container input::placeholder {
+    color: #888;
+}
+
+.input-container input:focus {
+    border-color: rgba(70, 220, 220, 0.8);
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.auth-error {
+    min-height: 16px;
+    margin: 8px 0;
+
+    color: #ff8a8a;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 8px;
+    padding: 14px;
+    background: none;
+    border: 1px solid rgba(70, 220, 220, 0.65);
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.auth-submit:hover {
+    background-color: rgba(70, 220, 220, 0.12);
+    border-color: rgba(70, 220, 220, 1);
+
+    transform: translateY(-2px);
+}
+
+.auth-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+.auth-link {
+    margin: 22px 0 0;
+    color: #aaa;
+    font-size: 13px;
+    text-align: center;
+}
+
+.auth-link a {
+    color: rgba(70, 220, 220, 0.9);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.auth-link a:hover {
+    color: rgba(70, 220, 220, 1);
+    text-decoration: underline;
+}

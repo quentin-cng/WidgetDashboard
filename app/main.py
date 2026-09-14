@@ -23,6 +23,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def login_page(request: Request):
     return templates.TemplateResponse(request=request, name="login.html")
 
+@app.get("/signup")
+def signup_page(request: Request):
+    return templates.TemplateResponse(request=request, name="signup.html")
 
 @app.get("/dashboard-page")
 def dashboard_page(request: Request):

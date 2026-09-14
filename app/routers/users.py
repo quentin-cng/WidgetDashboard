@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from app.database import get_db
 
 from sqlalchemy import select
-from app.models import User
+from app.models import User, WidgetPreference
 
 from app.schemas import UserCreate, UserResponse
 
@@ -28,6 +28,13 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=409, detail="Email already registered")
     db.refresh(new_user)
+
+    weather_preference = WidgetPreference(user_id=new_user.id, widget_name="weather", config={"city": "New York"})
+    github_preference = WidgetPreference(user_id=new_user.id, widget_name="github", config={"username": ""})
+
+    db.add(weather_preference)
+    db.add(github_preference)
+    db.commit()
 
     return new_user
 

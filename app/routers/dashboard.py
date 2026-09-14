@@ -99,6 +99,27 @@ def update_widget(
     if preference is None:
         raise HTTPException(status_code=404, detail="Widget preference not found")
     
+    if widget_name == "weather":
+        city = widget.config.get("city")
+
+        if not city:
+            raise HTTPException(
+                status_code=400,
+                detail="City is required"
+            )
+        fetch_weather(city)
+
+
+    if widget_name == "github":
+        username = widget.config.get("username")
+
+        if not username:
+            raise HTTPException(
+                status_code=400,
+                detail="GitHub username is required"
+            )
+        fetch_github(username)
+    
     preference.config = widget.config
 
     db.commit()

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WidgetDashboard - Sign Up</title>
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+
+<body>
+
+    <form class="auth-form">
+        <p class="auth-title">Create your account</p>
+        <p class="auth-subtitle">Get started with WidgetDashboard</p>
+
+        <div class="input-container">
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter username"
+                required>
+        </div>
+
+        <div class="input-container">
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter email"
+                required>
+        </div>
+
+        <div class="input-container">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                required>
+        </div>
+
+        <p id="signup-error" class="auth-error"></p>
+
+        <button type="submit" class="auth-submit">
+            SIGN UP
+        </button>
+
+        <p class="auth-link">
+            Already have an account?
+            <a href="/login">Sign in</a>
+        </p>
+    </form>
+
+
+
+    <script>
+        const form = document.querySelector("form");
+        const submitButton = document.querySelector(".auth-submit");
+        const errorMessage = document.querySelector("#signup-error");
+    
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            errorMessage.textContent = "";
+            submitButton.textContent = "CREATING ACCOUNT...";
+            submitButton.disabled = true;
+    
+            const username = document.querySelector("#username").value.trim();
+            const email = document.querySelector("#email").value.trim();
+            const password = document.querySelector("#password").value;
+    
+            const response = await fetch("/users/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                window.location.href = "/login";
+            } else {
+                errorMessage.textContent =
+                    data.detail || "Unable to create account";
+    
+                submitButton.textContent = "SIGN UP";
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+
+</html>
