@@ -33,8 +33,12 @@ def fetch_api(url: str, params: dict):
         response = httpx.get(url, params=params, timeout=5.0)
         response.raise_for_status()
         return response.json()
-    except httpx.HTTPError:
-        raise HTTPException(status_code=503, detail="Weather service is unavailable")
+    except httpx.HTTPError as e:
+        print("WEATHER API ERROR:", repr(e), flush=True)
+        raise HTTPException(
+            status_code=503,
+            detail="Weather service is unavailable"
+        )
 
 
 
